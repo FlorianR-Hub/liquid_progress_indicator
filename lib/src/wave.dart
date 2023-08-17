@@ -81,61 +81,39 @@ class _WaveClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    if (direction == Axis.horizontal) {
-      Path path = Path()
-        ..addPolygon(_generateHorizontalWavePath(size), false)
-        ..lineTo(0.0, size.height)
-        ..lineTo(0.0, 0.0)
-        ..close();
-      return path;
-    }
-
     double p = value ?? 50 / 100.0;
-    double n = waveCount;
-    double amp = amplitude;
-    double baseHeight = (1 - p) * size.height;
-
     Path path = Path();
-    path.moveTo(0.0, baseHeight);
-    for (double i = 0.0; i < size.width; i++) {
-      path.lineTo(
-          i,
-          baseHeight +
-              math.sin((i / size.width * 2 * math.pi * n) +
-                      (animationValue * 2 * math.pi) +
-                      math.pi * 1) *
-                  amp);
+
+    if (direction == Axis.horizontal) {
+      double baseWidth = p * size.width;
+
+      path.moveTo(baseWidth, 0.0);
+      for (double i = 0.0; i < size.height; i++) {
+        path.lineTo(
+            baseWidth + math.sin((i / size.height * 2 * math.pi * waveCount) + (animationValue * 2 * math.pi) + math.pi * 1) * amplitude,
+            i
+        );
+      }
+
+      path.lineTo(0.0, size.height);
+      path.lineTo(0.0, 0.0);
+    } else {
+      double baseHeight = (1 - p) * size.height;
+
+      path.moveTo(0.0, baseHeight);
+      for (double i = 0.0; i < size.width; i++) {
+        path.lineTo(
+            i,
+            baseHeight + math.sin((i / size.width * 2 * math.pi * waveCount) + (animationValue * 2 * math.pi) + math.pi * 1) * amplitude
+        );
+      }
+
+      path.lineTo(size.width, size.height);
+      path.lineTo(0.0, size.height);
     }
 
-    path.lineTo(size.width, size.height);
-    path.lineTo(0.0, size.height);
     path.close();
-
     return path;
-  }
-
-  List<Offset> _generateHorizontalWavePath(Size size) {
-    final waveList = <Offset>[];
-    for (int i = -2; i <= size.height.toInt() + 2; i++) {
-      final waveHeight = (size.width / 20);
-      final dx = math.sin((animationValue * 360 - i) % 360 * (math.pi / 180)) *
-              waveHeight +
-          (size.width * value!);
-      waveList.add(Offset(dx, i.toDouble()));
-    }
-    return waveList;
-  }
-
-  List<Offset> _generateVerticalWavePath(Size size) {
-    final waveList = <Offset>[];
-    for (int i = -2; i <= size.width.toInt() + 2; i++) {
-      final waveHeight = (size.height / 20);
-      final dy = math.sin((animationValue * 360 - i) % 360 * (math.pi / 180)) *
-              waveHeight +
-          (size.height - (size.height * value!));
-      waveList.add(Offset(i.toDouble(), dy));
-    }
-    return waveList;
   }
 
   @override
