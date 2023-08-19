@@ -90,7 +90,7 @@ class _WaveClipper extends CustomClipper<Path> {
       path.moveTo(baseWidth, 0.0);
       for (double i = -2; i < size.height + 2; i++) {
         path.lineTo(
-            baseWidth + math.sin((i / size.height * 2 * math.pi * waveCount) + (animationValue * 2 * math.pi) + math.pi) * amplitude,
+            baseWidth + math.sin((i / size.height * 2 * math.pi * waveCount) - (animationValue * 2 * math.pi) + math.pi) * amplitude,
             i
         );
       }
@@ -104,7 +104,7 @@ class _WaveClipper extends CustomClipper<Path> {
       for (double i = -2; i < size.width + 2; i++) {
         path.lineTo(
             i,
-            baseHeight + math.sin((i / size.width * 2 * math.pi * waveCount) + (animationValue * 2 * math.pi) + math.pi) * amplitude
+            baseHeight + math.sin((i / size.width * 2 * math.pi * waveCount) - (animationValue * 2 * math.pi) + math.pi) * amplitude
         );
       }
 
